@@ -1,0 +1,42 @@
+/* General styles for the app */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f9;
+    color: #333;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0056b3;
+    color: white;
+    padding: 1rem 2rem;
+  }
+  
+  header h1 {
+    font-size: 1.5rem;
+  }
+  
+  nav button {
+    background: white;
+    color: #0056b3;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  nav button:hover {
+    background: #004494;
+    color: white;
+  }
+  
+  main {
+    padding: 2rem;
+  }
+  
