@@ -1429,8 +1429,28 @@
 
             if (delay > 0) {
                 setTimeout(() => {
+                    // Format the task date and time
+                    const taskDate = new Date(reminderTime);
+                    const formattedDate = taskDate.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    
+                    // Format time to 12-hour format
+                    let formattedTime = 'No time';
+                    if (taskData.time) {
+                        const timeParts = taskData.time.split(':');
+                        let hours = parseInt(timeParts[0]);
+                        const minutes = timeParts[1];
+                        const ampm = hours >= 12 ? 'PM' : 'AM';
+                        hours = hours % 12 || 12;
+                        formattedTime = `${hours}:${minutes} ${ampm}`;
+                    }
+
+                    // Create notification with formatted content
                     new Notification('Task Reminder', {
-                        body: `Reminder: "${taskData.title}" is coming up!`,
+                        body: `${formattedDate} at ${formattedTime}\n${taskData.type}: ${taskData.title}`,
                         icon: '/favicon.ico' // Add your favicon path
                     });
                 }, delay);
