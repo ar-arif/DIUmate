@@ -857,16 +857,20 @@
 
         .reminder-options {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            flex-direction: column;
+            gap: 8px;
             margin: 10px 0;
         }
 
         .reminder-checkbox {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
             cursor: pointer;
+        }
+
+        .reminder-checkbox input[type="radio"] {
+            margin: 0;
         }
 
         .custom-reminder {
@@ -941,26 +945,25 @@
             <input type="time" id="taskTime" class="task-time-input">
 
             <div class="reminder-section">
-                <label for="reminders">Reminder (Optional)</label>
+                <label for="reminders">Reminder</label>
                 <div class="reminder-options">
                     <label class="reminder-checkbox">
-                        <input type="radio" name="reminderType" id="reminder1hr" value="1hr"> 1 hour before
+                        <input type="radio" name="reminderType" value="none" checked> No reminder
                     </label>
                     <label class="reminder-checkbox">
-                        <input type="radio" name="reminderType" id="reminder2hr" value="2hr"> 2 hours before
+                        <input type="radio" name="reminderType" value="1hr"> 1 hour before
                     </label>
                     <label class="reminder-checkbox">
-                        <input type="radio" name="reminderType" id="reminder1day" value="1day"> 1 day before
+                        <input type="radio" name="reminderType" value="2hr"> 2 hours before
                     </label>
                     <label class="reminder-checkbox">
-                        <input type="radio" name="reminderType" id="reminderCustom" value="custom"> Custom date/time
+                        <input type="radio" name="reminderType" value="1day"> 1 day before
                     </label>
                     <label class="reminder-checkbox">
-                        <input type="radio" name="reminderType" id="reminderNone" value="none" checked> No reminder
+                        <input type="radio" name="reminderType" value="custom"> Custom
                     </label>
                 </div>
                 <div class="custom-reminder" style="display: none;">
-                    <label for="customReminderDateTime">Custom Reminder Date & Time</label>
                     <input type="datetime-local" id="customReminderDateTime" class="task-time-input">
                 </div>
             </div>
@@ -984,6 +987,8 @@
         const taskTypeSelect = document.getElementById('taskType');
         const taskDescriptionInput = document.getElementById('taskDescription');
         const taskTimeInput = document.getElementById('taskTime');
+        const reminderRadios = document.querySelectorAll('input[name="reminderType"]');
+        const customReminderDiv = document.querySelector('.custom-reminder');
 
         let currentDate = new Date();
         let selectedDate = null;
@@ -1115,6 +1120,22 @@
             }
         }
 
+        reminderRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.value === 'custom') {
+                    customReminderDiv.style.display = 'block';
+                } else {
+                    customReminderDiv.style.display = 'none';
+                }
+                
+                // Show warning if time is required but not set
+                if (['1hr', '2hr', '1day'].includes(radio.value) && !taskTimeInput.value) {
+                    alert('Please set a task time first to use this reminder option.');
+                    document.querySelector('input[value="none"]').checked = true;
+                }
+            });
+        });
+
         saveTaskBtn.addEventListener('click', () => {
             const title = taskTitleInput.value.trim();
             const type = taskTypeSelect.value;
@@ -1131,15 +1152,9 @@
             // Get selected reminder type
             const selectedReminder = document.querySelector('input[name="reminderType"]:checked').value;
             
-            // Validate time if time-based reminder is selected
+            // Validate time if needed for reminder
             if (['1hr', '2hr', '1day'].includes(selectedReminder) && !time) {
-                alert('Please set a time for the task to enable this reminder.');
-                return;
-            }
-
-            // Validate custom reminder if selected
-            if (selectedReminder === 'custom' && !document.getElementById('customReminderDateTime').value) {
-                alert('Please set a custom reminder date and time.');
+                alert('Please set a time for the task to enable this reminder option.');
                 return;
             }
 
@@ -1170,23 +1185,30 @@
 
             // Schedule reminder based on type
             if (selectedReminder !== 'none') {
+                let reminderTime;
+                
                 if (selectedReminder === 'custom') {
-                    scheduleReminder(taskData, new Date(taskData.reminder.customDateTime));
-                } else if (time) {
-                    const reminderTimes = calculateReminderTimes(taskDate, time);
-                    if (reminderTimes) {
-                        switch(selectedReminder) {
-                            case '1hr':
-                                scheduleReminder(taskData, reminderTimes.oneHour);
-                                break;
-                            case '2hr':
-                                scheduleReminder(taskData, reminderTimes.twoHours);
-                                break;
-                            case '1day':
-                                scheduleReminder(taskData, reminderTimes.oneDay);
-                                break;
-                        }
+                    reminderTime = new Date(taskData.reminder.customDateTime);
+                } else {
+                    const taskDateTime = new Date(taskDate);
+                    const [hours, minutes] = time.split(':');
+                    taskDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                    
+                    switch (selectedReminder) {
+                        case '1hr':
+                            reminderTime = new Date(taskDateTime.getTime() - (60 * 60 * 1000));
+                            break;
+                        case '2hr':
+                            reminderTime = new Date(taskDateTime.getTime() - (2 * 60 * 60 * 1000));
+                            break;
+                        case '1day':
+                            reminderTime = new Date(taskDateTime.getTime() - (24 * 60 * 60 * 1000));
+                            break;
                     }
+                }
+                
+                if (reminderTime) {
+                    scheduleReminder(taskData, reminderTime);
                 }
             }
 
@@ -1205,9 +1227,9 @@
             taskTypeSelect.value = '';
             taskDescriptionInput.value = '';
             taskTimeInput.value = '';
-            document.getElementById('reminderNone').checked = true;
+            document.querySelector('input[value="none"]').checked = true;
+            customReminderDiv.style.display = 'none';
             document.getElementById('customReminderDateTime').value = '';
-            document.querySelector('.custom-reminder').style.display = 'none';
         }
 
         // Initialize Calendar
@@ -1262,16 +1284,20 @@
             taskDescriptionInput.value = task.description || '';
             taskTimeInput.value = task.time || '';
 
-            // Set reminder option
+            // Set reminder radio button
             if (task.reminder) {
-                const reminderRadio = document.querySelector(`input[name="reminderType"][value="${task.reminder.type}"]`);
-                if (reminderRadio) {
-                    reminderRadio.checked = true;
-                    if (task.reminder.type === 'custom') {
-                        document.querySelector('.custom-reminder').style.display = 'block';
-                        document.getElementById('customReminderDateTime').value = task.reminder.customDateTime;
-                    }
+                const reminderType = task.reminder.type;
+                document.querySelector(`input[value="${reminderType}"]`).checked = true;
+                
+                if (reminderType === 'custom') {
+                    customReminderDiv.style.display = 'block';
+                    document.getElementById('customReminderDateTime').value = task.reminder.customDateTime || '';
+                } else {
+                    customReminderDiv.style.display = 'none';
                 }
+            } else {
+                document.querySelector('input[value="none"]').checked = true;
+                customReminderDiv.style.display = 'none';
             }
 
             document.getElementById('taskId').value = index;
@@ -1429,33 +1455,6 @@
         // Request notification permission when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             requestNotificationPermission();
-        });
-
-        // Add these new functions and event listeners
-        document.querySelectorAll('input[name="reminderType"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const customReminderDiv = document.querySelector('.custom-reminder');
-                const taskTimeInput = document.getElementById('taskTime');
-                
-                // Show/hide custom reminder input
-                customReminderDiv.style.display = this.value === 'custom' ? 'block' : 'none';
-                
-                // Clear custom reminder when switching to other options
-                if (this.value !== 'custom') {
-                    document.getElementById('customReminderDateTime').value = '';
-                }
-                
-                // Mark time input as required for time-based reminders
-                if (['1hr', '2hr', '1day'].includes(this.value)) {
-                    taskTimeInput.setAttribute('required', 'required');
-                    if (!taskTimeInput.value) {
-                        alert('Please set a time for the task to enable this reminder.');
-                        document.getElementById('reminderNone').checked = true;
-                    }
-                } else {
-                    taskTimeInput.removeAttribute('required');
-                }
-            });
         });
     </script>
 </body>
