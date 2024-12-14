@@ -1079,6 +1079,122 @@
                 /* Remove border-related properties */
             }
         }
+
+        /* Modern Checkbox Styles */
+        .task-checkbox {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--google-gray-300);
+            border-radius: 4px;
+            margin: 0 8px 0 0;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            background-color: var(--google-surface);
+        }
+
+        .task-checkbox:checked {
+            background-color: var(--google-blue);
+            border-color: var(--google-blue);
+        }
+
+        .task-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .task-checkbox:hover {
+            border-color: var(--google-blue);
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .task-checkbox:focus {
+            outline: none;
+            border-color: var(--google-blue);
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        /* Update task completion section checkbox */
+        .completion-checkbox input[type="checkbox"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--google-gray-300);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            background-color: var(--google-surface);
+        }
+
+        .completion-checkbox input[type="checkbox"]:checked {
+            background-color: var(--google-blue);
+            border-color: var(--google-blue);
+        }
+
+        .completion-checkbox input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .completion-checkbox input[type="checkbox"]:hover {
+            border-color: var(--google-blue);
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .completion-checkbox input[type="checkbox"]:focus {
+            outline: none;
+            border-color: var(--google-blue);
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        /* Add dark mode styles for checkboxes */
+        @media (prefers-color-scheme: dark) {
+            .task-checkbox,
+            .completion-checkbox input[type="checkbox"] {
+                border-color: var(--google-gray-200);
+                background-color: var(--google-surface);
+            }
+
+            .task-checkbox:checked,
+            .completion-checkbox input[type="checkbox"]:checked {
+                background-color: var(--google-blue);
+                border-color: var(--google-blue);
+            }
+
+            .task-checkbox:hover,
+            .completion-checkbox input[type="checkbox"]:hover {
+                border-color: var(--google-blue);
+                box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+            }
+
+            .task-checkbox:focus,
+            .completion-checkbox input[type="checkbox"]:focus {
+                border-color: var(--google-blue);
+                box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+            }
+        }
     </style>
 </head>
 
