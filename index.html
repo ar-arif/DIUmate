@@ -1195,6 +1195,38 @@
                 box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
             }
         }
+
+        .header .btn {
+            font-size: 24px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            border: none;
+            color: var(--google-text);
+            background: transparent;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .header .btn:hover {
+            background-color: var(--google-gray-100);
+        }
+
+        /* Update dark mode styles for the buttons */
+        @media (prefers-color-scheme: dark) {
+            .header .btn {
+                color: var(--google-text);
+            }
+
+            .header .btn:hover {
+                background: var(--google-gray-50);
+            }
+        }
     </style>
 </head>
 
@@ -1202,9 +1234,9 @@
     <div class="container">
         <div class="calendar">
             <div class="header">
-                <button class="btn" id="prevMonth">Prev</button>
+                <button class="btn" id="prevMonth">‹</button>
                 <h2 id="monthYear"></h2>
-                <button class="btn" id="nextMonth">Next</button>
+                <button class="btn" id="nextMonth">›</button>
             </div>
             <div class="calendar-days">
                 <div>Sat</div>
