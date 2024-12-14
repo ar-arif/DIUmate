@@ -1,30 +1,55 @@
-# Student Productivity Tool
+# DIUmate 🎓
 
-A modern, intuitive calendar application designed specifically for students to manage their academic tasks and deadlines effectively.
+Your personal academic companion for Daffodil International University (DIU) - Track progress, manage studies, and achieve your academic goals with ease.
 
-## 🌟 Features
+## 🌟 Key Features
 
-- **Interactive Calendar Interface**: Clean and responsive design with month navigation
-- **Task Management**: 
-  - Add, edit, and delete academic tasks
-  - Multiple task types (Quiz, Assignment, Presentation, etc.)
-  - Time-specific task scheduling
-- **Task Overview**: Separate panel showing all pending tasks
-- **Dark Mode Support**: Automatic theme switching based on system preferences
-- **Local Storage**: Tasks persist between sessions
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Semester Dashboard**
+  - Current CGPA tracker
+  - Credit completion status
+  - Course-wise progress visualization
+  - Attendance monitoring
 
-## 🚀 Live Demo
+- **Study Activity Management**
+  - Course-specific task organization
+  - Assignment deadline tracking
+  - Quiz and exam scheduler
+  - Presentation planner
+  - Lab work tracker
 
-Visit the live application: [Student Productivity Tool](https://ar-arif.github.io/WAD-ITM224-Lab-Project)
+- **Performance Analytics**
+  - Semester-wise CGPA progression
+  - Subject-wise performance graphs
+  - Attendance percentage calculator
+  - Achievement milestones
+
+- **Smart Calendar**
+  - Academic calendar integration
+  - Exam schedule management
+  - Class routine visualization
+  - Assignment deadline reminders
+
+- **Personal Progress Tracking**
+  - Individual course progress bars
+  - Assessment submission status
+  - Study hour logging
+  - Performance comparison with class average
 
 ## 💻 Technologies Used
 
 - HTML5
 - CSS3
-- Vanilla JavaScript
+- JavaScript
 - Local Storage API
+
+## 🚀 Live Demo
+
+Experience DIUmate: [Live Demo](https://ar-arif.github.io/WAD-ITM224-Lab-Project)
 
 ## 🛠️ Installation
 
 1. Clone the repository:
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
