@@ -15,7 +15,7 @@
 
         .calendar {
             width: 90%;
-            max-width: 1000px;
+            max-width: 920px;
             margin: 50px auto;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
@@ -882,6 +882,121 @@
                 border-color: var(--google-gray-100);
             }
         }
+
+        /* Add these new styles */
+        .completed-section {
+            margin-top: 20px;
+            border-top: 1px solid var(--google-gray-200);
+            padding-top: 15px;
+        }
+
+        .completed-section h3 {
+            margin: 0 0 15px 0;
+            padding: 0;
+            border: none;
+        }
+
+        .collapse-btn {
+            background: none;
+            border: none;
+            color: var(--google-text);
+            font-size: 16px;
+            font-weight: 500;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsed .arrow {
+            transform: rotate(-90deg);
+        }
+
+        .completed-list {
+            transition: max-height 0.3s ease-out;
+            max-height: 500px;
+            overflow: hidden;
+        }
+
+        .completed-list.collapsed {
+            max-height: 0;
+        }
+
+        .task-list-item.completed {
+            opacity: 0.7;
+            border-left-color: var(--google-gray-300);
+        }
+
+        .task-checkbox {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        /* Update task-list-item to include checkbox */
+        .task-list-item {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .completed-section {
+                border-top-color: var(--google-gray-100);
+            }
+            
+            .task-list-item.completed {
+                border-left-color: var(--google-gray-200);
+            }
+        }
+
+        /* Update tasks container styles */
+        .tasks-container {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .uncompleted-tasks,
+        .completed-tasks {
+            width: 100%;  /* Ensure both sections take full width of container */
+            background: var(--google-surface);
+            border-radius: 8px;
+            box-shadow: var(--google-shadow);
+            padding: 20px;
+            height: fit-content;
+        }
+
+        /* Remove any width specifications from completed-list */
+        .completed-list {
+            width: 100%;
+            transition: max-height 0.3s ease-out;
+            max-height: 500px;
+            overflow: hidden;
+        }
+
+        /* Update responsive design */
+        @media (max-width: 768px) {
+            .tasks-container {
+                width: 100%;
+                gap: 16px;
+            }
+
+            .uncompleted-tasks,
+            .completed-tasks {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -907,10 +1022,23 @@
             </div>
         </div>
 
-        <div class="uncompleted-tasks">
-            <h3>Pending Tasks</h3>
-            <div class="task-list" id="taskList">
-                <!-- Tasks will be injected here -->
+        <div class="tasks-container">
+            <div class="uncompleted-tasks">
+                <h3>Pending Tasks</h3>
+                <div class="task-list" id="taskList">
+                    <!-- Tasks will be injected here -->
+                </div>
+            </div>
+            
+            <div class="completed-tasks">
+                <h3>
+                    <button class="collapse-btn" id="toggleCompleted">
+                        <span class="arrow">▼</span> Completed Tasks
+                    </button>
+                </h3>
+                <div class="completed-list" id="completedList">
+                    <!-- Completed tasks will be injected here -->
+                </div>
             </div>
         </div>
     </div>
@@ -1327,64 +1455,98 @@
         // Update the renderTaskList function to show all pending tasks
         function renderTaskList() {
             const taskList = document.getElementById('taskList');
+            const completedList = document.getElementById('completedList');
             taskList.innerHTML = '';
+            completedList.innerHTML = '';
 
             // Collect all tasks
             const pendingTasks = [];
+            const completedTasks = [];
+
             for (const dateKey in tasks) {
                 tasks[dateKey].forEach((task, index) => {
-                    pendingTasks.push({
+                    const taskItem = {
                         date: new Date(dateKey),
                         dateKey: dateKey,
                         task: task,
                         index: index
-                    });
+                    };
+                    
+                    if (task.completed) {
+                        completedTasks.push(taskItem);
+                    } else {
+                        pendingTasks.push(taskItem);
+                    }
                 });
             }
 
             // Sort tasks by date
             pendingTasks.sort((a, b) => a.date - b.date);
+            completedTasks.sort((a, b) => b.date - a.date); // Reverse chronological for completed tasks
 
-            // Render tasks
+            // Render pending tasks
             pendingTasks.forEach(({ dateKey, task, index, date }) => {
-                const taskEl = document.createElement('div');
-                taskEl.classList.add('task-list-item');
-
-                // Format date
-                const formattedDate = date.toLocaleDateString('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric'
-                });
-
-                // Format time
-                let formattedTime = 'No time';
-                if (task.time) {
-                    const timeParts = task.time.split(':');
-                    let hours = parseInt(timeParts[0]);
-                    const minutes = timeParts[1];
-                    const ampm = hours >= 12 ? 'PM' : 'AM';
-                    if (hours > 12) hours -= 12;
-                    else if (hours === 0) hours = 12;
-                    formattedTime = `${hours}:${minutes} ${ampm}`;
-                }
-
-                // Remove the checkbox-container div and render content directly
-                taskEl.innerHTML = `
-                    <div class="task-list-date">${formattedDate}</div>
-                    <div class="task-list-type">${task.type}</div>
-                    ${task.time ? `<div class="task-list-time">${formattedTime}</div>` : ''}
-                    <div class="task-list-title">${task.title}</div>
-                `;
-
-                // Add click handler to navigate to date
-                taskEl.addEventListener('click', () => {
-                    navigateToDate(date);
-                    openEditModal(task, dateKey, index);
-                });
-
-                taskList.appendChild(taskEl);
+                renderTaskItem(taskList, dateKey, task, index, date, false);
             });
+
+            // Render completed tasks
+            completedTasks.forEach(({ dateKey, task, index, date }) => {
+                renderTaskItem(completedList, dateKey, task, index, date, true);
+            });
+        }
+
+        // Helper function to render individual task items
+        function renderTaskItem(container, dateKey, task, index, date, isCompleted) {
+            const taskEl = document.createElement('div');
+            taskEl.classList.add('task-list-item');
+            if (isCompleted) taskEl.classList.add('completed');
+
+            const formattedDate = date.toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric'
+            });
+
+            let formattedTime = 'No time';
+            if (task.time) {
+                const timeParts = task.time.split(':');
+                let hours = parseInt(timeParts[0]);
+                const minutes = timeParts[1];
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                if (hours > 12) hours -= 12;
+                else if (hours === 0) hours = 12;
+                formattedTime = `${hours}:${minutes} ${ampm}`;
+            }
+
+            // Create checkbox
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = isCompleted;
+            checkbox.classList.add('task-checkbox');
+            checkbox.addEventListener('change', () => {
+                task.completed = checkbox.checked;
+                saveTasks();
+            });
+
+            // Create task content
+            const content = document.createElement('div');
+            content.classList.add('task-content');
+            content.innerHTML = `
+                <div class="task-list-date">${formattedDate}</div>
+                <div class="task-list-type">${task.type}</div>
+                ${task.time ? `<div class="task-list-time">${formattedTime}</div>` : ''}
+                <div class="task-list-title">${task.title}</div>
+            `;
+
+            // Add click handler to navigate to date (excluding checkbox clicks)
+            content.addEventListener('click', () => {
+                navigateToDate(date);
+                openEditModal(task, dateKey, index);
+            });
+
+            taskEl.appendChild(checkbox);
+            taskEl.appendChild(content);
+            container.appendChild(taskEl);
         }
 
         // Add function to navigate to specific date
@@ -1475,6 +1637,15 @@
         // Request notification permission when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             requestNotificationPermission();
+        });
+
+        // Add toggle functionality for completed tasks section
+        const toggleCompletedBtn = document.getElementById('toggleCompleted');
+        const completedList = document.getElementById('completedList');
+
+        toggleCompletedBtn.addEventListener('click', () => {
+            completedList.classList.toggle('collapsed');
+            toggleCompletedBtn.classList.toggle('collapsed');
         });
     </script>
 </body>
