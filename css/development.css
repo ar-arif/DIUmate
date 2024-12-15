@@ -1,0 +1,85 @@
+:root {
+    --google-blue: #1a73e8;
+    --google-surface: #ffffff;
+    --google-text: #202124;
+    --google-gray-50: #f8f9fa;
+}
+
+body {
+    font-family: 'Google Sans', Roboto, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--google-gray-50);
+    color: var(--google-text);
+}
+
+.development-container {
+    text-align: center;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--google-text);
+    font-weight: 400;
+}
+
+.development-content {
+    background: var(--google-surface);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.status {
+    font-size: 1.25rem;
+    color: var(--google-blue);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.description {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #5f6368;
+    margin-bottom: 2rem;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--google-blue);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.back-button:hover {
+    background-color: #1557b0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --google-surface: #202124;
+        --google-text: #e8eaed;
+        --google-gray-50: #303134;
+    }
+
+    .description {
+        color: #9aa0a6;
+    }
+
+    .development-content {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+} 
