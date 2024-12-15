@@ -1,52 +1,53 @@
 # DIUmate 🎓
 
-Your personal academic companion for Daffodil International University (DIU) - Track progress, manage studies, and achieve your academic goals with ease.
+A modern academic task management system designed for Daffodil International University students.
 
-## 🌟 Key Features
+![DIUmate Preview](assets/preview.png)
 
-- **Semester Dashboard**
-  - Current CGPA tracker
-  - Credit completion status
-  - Course-wise progress visualization
-  - Attendance monitoring
+## 🌟 Features
 
-- **Study Activity Management**
-  - Course-specific task organization
-  - Assignment deadline tracking
-  - Quiz and exam scheduler
-  - Presentation planner
-  - Lab work tracker
+### For Students
+- 📅 Interactive Calendar View
+- ✅ Task Management System
+- ⏰ Smart Reminder System
+- 📱 Responsive Design (Mobile & Desktop)
+- 🌙 Dark Mode Support
+- 📊 Progress Tracking (Coming Soon)
+- 🏆 Scoreboard System (Coming Soon)
 
-- **Performance Analytics**
-  - Semester-wise CGPA progression
-  - Subject-wise performance graphs
-  - Attendance percentage calculator
-  - Achievement milestones
+### For Developers
+- 🔧 Modular Architecture
+- 💾 Local Storage Integration
+- 🎨 Material Design Implementation
+- 📦 No External Dependencies
+- 🌐 Cross-browser Compatible
 
-- **Smart Calendar**
-  - Academic calendar integration
-  - Exam schedule management
-  - Class routine visualization
-  - Assignment deadline reminders
+## 🚀 Quick Start
 
-- **Personal Progress Tracking**
-  - Individual course progress bars
-  - Assessment submission status
-  - Study hour logging
-  - Performance comparison with class average
+### For Users
 
-## 💻 Technologies Used
+1. Visit [DIUmate Web App](https://ar-arif.github.io/DIUmate/)
+2. Allow notifications for reminders (optional)
+3. Start adding your academic tasks!
 
-- HTML5
-- CSS3
-- JavaScript
-- Local Storage API
+#### Using the Calendar
+- Click on any date to add a new task
+- Click on existing tasks to edit or delete them
+- Tasks are color-coded based on their type
+- Today's date is highlighted with a green border
 
-## 🚀 Live Demo
+#### Managing Tasks
+- Add tasks with title, type, description, and time
+- Set reminders (1 hour, 2 hours, 1 day before, or custom)
+- Mark tasks as completed
+- View all tasks in the side panel
+- Toggle completed tasks visibility
 
-Experience DIUmate: [Live Demo](https://ar-arif.github.io/WAD-ITM224-Lab-Project)
+#### Dark Mode
+- Automatically adapts to your system preferences
+- Provides comfortable viewing in low-light conditions
 
-## 🛠️ Installation
+### For Developers
 
 1. Clone the repository:
 
